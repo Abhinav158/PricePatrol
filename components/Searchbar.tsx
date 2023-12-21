@@ -1,5 +1,6 @@
 "use client"
 
+import { scrapeAndStoreProduct } from "@/lib/actions";
 import { FormEvent, useState } from "react"
 
 const isValidProductURL = (url: string) => {
@@ -22,16 +23,32 @@ const isValidProductURL = (url: string) => {
 const Searchbar = () => {
 
   const [searchPrompt, setSearchPrompt] = useState('');
-  
+  const [isLoading, setIsLoading] = useState(false);
   // Prevent default behaviour of the browser once the form is submitted
   // We do not want to reload the page after submitting the form
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Check validity of the URL entered by the user 
     const isValidLink = isValidProductURL(searchPrompt);
-    alert(isValidLink ? 'Valid Link' : 'Invalid Link')
+    
+    if(!isValidLink){
+        return alert('Please provide a valid Amazon product Link')
+    }
+
+    try {
+        setIsLoading(true);
+
+        // Scrape the product 
+        const product = await scrapeAndStoreProduct(searchPrompt);
+
+
+    } catch (error) {
+        console.log(error);
+    } finally{
+        setIsLoading(false)
+    }
   } 
 
   return (
@@ -48,7 +65,9 @@ const Searchbar = () => {
             className="searchbar-input" 
         />
         <button type='submit' className="searchbar-btn">
-            Search                    
+            {
+                isLoading ? 'Searching...' : 'Search'
+            }                    
         </button>
     
     
