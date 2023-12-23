@@ -1,14 +1,16 @@
 // CRON Jobs - Periodically update the user regarding selected products by rescraping and notifying incase there is any desired change
 
+import { getLowestPrice, getHighestPrice, getAveragePrice, getEmailNotifType } from "@/lib/utils";
 import { NextResponse } from "next/server";
 import { connectToDB } from "@/lib/mongoose";
-import { getLowestPrice, getHighestPrice, getAveragePrice, getEmailNotifType } from "@/lib/utils";
 
 import Product from "@/lib/models/product.model";
 import { scrapeAmazonProduct } from "@/lib/scraper";
 import { generateEmailBody, sendEmail } from "@/lib/nodemailer";
 
-export const maxDuration = 300; // This function can run for a maximum of 300 seconds
+// This function can run for a maximum of 300 seconds
+export const maxDuration = 300; 
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
