@@ -10,11 +10,9 @@ const Notification = {
   THRESHOLD_MET: 'THRESHOLD_MET',
 }
 
-export async function generateEmailBody(
-  product: EmailProductInfo,
-  type: NotificationType
-  ) {
+export async function generateEmailBody(product: EmailProductInfo, type: NotificationType) {
   const THRESHOLD_PERCENTAGE = 40;
+  
   // Shorten the product title
   const shortenedTitle =
     product.title.length > 20
